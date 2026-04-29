@@ -1,0 +1,26 @@
+node_modules
+.svelte-kit
+build
+.DS_Store
+
+# env
+.env
+.env.*
+!.env.example
+
+# data
+data/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# uploads (dev local storage)
+uploads/
+
+# tooling
+.vscode/
+.idea/
+coverage/
+playwright-report/
+test-results/
