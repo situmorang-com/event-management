@@ -1,6 +1,6 @@
 <script lang="ts">
   let { children, data } = $props();
-  const base = `/t/${data.team.slug}/conferences/${data.conference.id}`;
+  const base = $derived(`/t/${data.team.slug}/conferences/${data.conference.id}`);
 </script>
 
 <div>

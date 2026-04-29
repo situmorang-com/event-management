@@ -15,7 +15,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "tsx src/lib/server/db/migrate.ts",
+    "db:migrate": "node --env-file=.env --import tsx src/lib/server/db/migrate.ts",
     "db:studio": "drizzle-kit studio",
     "mail:up": "docker compose up -d mailpit",
     "mail:down": "docker compose down"
