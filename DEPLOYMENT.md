@@ -46,17 +46,17 @@ DATABASE_URL=file:./data/app.db
 ```
 
 **Email (SMTP):**
-Configure your email provider's SMTP settings:
+Using Hostinger for transmetatek.com:
 ```
-SMTP_HOST=your-smtp-server.com
+SMTP_HOST=smtp.hostinger.com
 SMTP_PORT=587
 SMTP_SECURE=true
-SMTP_USER=your-email@domain.com
-SMTP_PASS=your-password
-MAIL_FROM=Event Management <noreply@yourdomain.com>
+SMTP_USER=noreply@transmetatek.com
+SMTP_PASS=your-email-password
+MAIL_FROM=Event Management <noreply@transmetatek.com>
 ```
 
-> **Note:** For testing, you can use a free service like SendGrid, Mailgun, or AWS SES.
+> **Note:** Find your email password in Hostinger hPanel → Emails → Manage → Connect Apps & Devices
 
 ### 4. Configure Domain
 
