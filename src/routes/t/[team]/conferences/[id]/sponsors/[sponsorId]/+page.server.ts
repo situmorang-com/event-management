@@ -79,6 +79,7 @@ const updateSchema = z.object({
   contactName: z.string().trim().max(120).optional().or(z.literal('')),
   contactEmail: z.string().email().optional().or(z.literal('')),
   contactPhone: z.string().trim().max(40).optional().or(z.literal('')),
+  contactWhatsapp: z.string().trim().max(30).optional().or(z.literal('')),
   description: z.string().trim().max(2000).optional().or(z.literal('')),
   notes: z.string().trim().max(5000).optional().or(z.literal('')),
   isPublic: z.union([z.literal('on'), z.literal('off'), z.literal('')]).optional()
@@ -107,6 +108,7 @@ export const actions: Actions = {
         contactName: parsed.data.contactName || null,
         contactEmail: parsed.data.contactEmail || null,
         contactPhone: parsed.data.contactPhone || null,
+        contactWhatsapp: parsed.data.contactWhatsapp || null,
         description: parsed.data.description || null,
         notes: parsed.data.notes || null,
         isPublic: parsed.data.isPublic === 'on',

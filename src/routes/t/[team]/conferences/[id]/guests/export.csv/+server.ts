@@ -26,13 +26,14 @@ export const GET: RequestHandler = async ({ params, locals }) => {
     .from(attendees)
     .where(eq(attendees.conferenceId, conf.id));
 
-  const header = ['name', 'email', 'company', 'role', 'status', 'ticket_code', 'registered_at', 'checked_in_at'];
+  const header = ['name', 'email', 'whatsapp', 'company', 'role', 'status', 'ticket_code', 'registered_at', 'checked_in_at'];
   const lines = [
     header.join(','),
     ...rows.map((r) =>
       [
         r.name,
         r.email,
+        r.whatsapp,
         r.company,
         r.role,
         r.status,

@@ -43,6 +43,10 @@
     <span class="text-xs">Contact email</span>
     <input type="email" name="contactEmail" class="input mt-1" />
   </label>
+  <label class="block">
+    <span class="text-xs">Contact WhatsApp</span>
+    <input type="tel" name="contactWhatsapp" placeholder="+62 812 3456 7890" class="input mt-1" />
+  </label>
   <label class="block sm:col-span-2">
     <span class="text-xs">Description</span>
     <textarea name="description" rows="3" class="input mt-1"></textarea>

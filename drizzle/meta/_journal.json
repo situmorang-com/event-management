@@ -8,6 +8,13 @@
       "when": 1777493181214,
       "tag": "0000_absent_machine_man",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1777518442837,
+      "tag": "0001_tidy_mantis",
+      "breakpoints": true
     }
   ]
 }

@@ -137,6 +137,7 @@ export const attendees = sqliteTable(
     name: text('name').notNull(),
     company: text('company'),
     role: text('role'),
+    whatsapp: text('whatsapp'),
     status: text('status').notNull().default('registered'), // registered | confirmed | checked_in | cancelled
     ticketCode: text('ticket_code').notNull().unique(),
     registeredAt: integer('registered_at', { mode: 'timestamp' })
@@ -188,6 +189,7 @@ export const sponsors = sqliteTable(
     contactName: text('contact_name'),
     contactEmail: text('contact_email'),
     contactPhone: text('contact_phone'),
+    contactWhatsapp: text('contact_whatsapp'),
     status: text('status').notNull().default('prospect'),
     // prospect | invited | confirmed | paid | declined
     contractAssetId: text('contract_asset_id'),

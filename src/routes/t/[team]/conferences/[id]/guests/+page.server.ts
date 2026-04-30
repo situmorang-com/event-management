@@ -48,6 +48,7 @@ const addSchema = z.object({
   email: z.string().email().max(254),
   company: z.string().trim().max(120).optional().or(z.literal('')),
   role: z.string().trim().max(120).optional().or(z.literal('')),
+  whatsapp: z.string().trim().max(30).optional().or(z.literal('')),
   sendEmail: z.union([z.literal('on'), z.literal('off'), z.literal('')]).optional()
 });
 
@@ -84,6 +85,7 @@ export const actions: Actions = {
       name: parsed.data.name,
       company: parsed.data.company || null,
       role: parsed.data.role || null,
+      whatsapp: parsed.data.whatsapp || null,
       ticketCode: code,
       status: 'registered'
     });
