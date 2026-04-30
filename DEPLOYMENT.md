@@ -40,9 +40,10 @@ APP_URL=https://event.transmetatek.com
 NODE_ENV=production
 ```
 
-**Database:**
+**Database & Storage:**
 ```
 DATABASE_URL=file:./data/app.db
+UPLOAD_DIR=./data/uploads
 ```
 
 **Google OAuth:**

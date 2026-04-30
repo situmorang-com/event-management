@@ -65,6 +65,7 @@ export const load: PageServerLoad = async ({ params }) => {
       name: conf.name,
       description: conf.description,
       venue: conf.venue,
+      timezone: conf.timezone,
       startsAt: conf.startsAt,
       endsAt: conf.endsAt,
       capacity: conf.capacity
