@@ -3,6 +3,7 @@
   let { data, form } = $props();
 
   let showAdd = $state(false);
+  let editingId = $state<string | null>(null);
   let dragging = $state(false);
   let dropFileName = $state<string | null>(null);
   let importing = $state(false);
@@ -240,6 +241,9 @@
                   </a>
                 {/if}
               {/if}
+              {#if data.role !== 'staff'}
+                <button class="text-xs underline" onclick={() => { editingId = g.id; }}>edit</button>
+              {/if}
               {#if data.role !== 'staff' && g.status !== 'cancelled'}
                 <form method="POST" action="?/cancel" class="inline">
                   <input type="hidden" name="id" value={g.id} />
@@ -257,3 +261,60 @@
     </tbody>
   </table>
 </div>
+
+<!-- ── Edit modal ── -->
+{#if editingId}
+  {@const guest = data.guests.find(g => g.id === editingId)}
+  {#if guest}
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div class="card w-full max-w-md">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-semibold">Edit guest</h3>
+          <button type="button" class="text-slate-400 hover:text-slate-600" onclick={() => { editingId = null; }}>
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6 6 18M6 6 18 18"/>
+            </svg>
+          </button>
+        </div>
+        <form method="POST" action="?/edit" class="mt-4 space-y-3" use:enhance={() => {
+          return async ({ update, result }) => {
+            await update();
+            if (result.type === 'success') editingId = null;
+          };
+        }}>
+          <input type="hidden" name="id" value={guest.id} />
+          <label class="block">
+            <span class="text-sm font-medium">Name</span>
+            <input name="name" required class="input mt-1" value={guest.name} />
+          </label>
+          <label class="block">
+            <span class="text-sm font-medium">Email</span>
+            <input type="email" name="email" required class="input mt-1" value={guest.email ?? ''} />
+          </label>
+          <label class="block">
+            <span class="text-sm font-medium">Company</span>
+            <input name="company" class="input mt-1" value={guest.company ?? ''} />
+          </label>
+          <label class="block">
+            <span class="text-sm font-medium">Role</span>
+            <input name="role" class="input mt-1" value={guest.role ?? ''} />
+          </label>
+          <label class="block">
+            <span class="text-sm font-medium">WhatsApp number</span>
+            <div class="relative mt-1">
+              <span class="absolute inset-y-0 left-3 flex items-center text-xs font-semibold text-slate-400">WA</span>
+              <input type="tel" name="whatsapp" placeholder="+62 812 3456 7890" class="input pl-10" value={guest.whatsapp ?? ''} />
+            </div>
+          </label>
+          {#if form?.error}
+            <p class="text-sm text-red-600">{form.error}</p>
+          {/if}
+          <div class="flex gap-2 pt-2">
+            <button type="submit" class="btn-primary flex-1">Save changes</button>
+            <button type="button" class="btn-secondary flex-1" onclick={() => { editingId = null; }}>Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  {/if}
+{/if}

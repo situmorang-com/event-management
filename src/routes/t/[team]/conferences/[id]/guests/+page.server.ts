@@ -132,6 +132,44 @@ export const actions: Actions = {
     return { cancelled: true };
   },
 
+  edit: async ({ request, locals, params }) => {
+    const { conf } = await ctx(params as any, locals, 'admin');
+    const data = Object.fromEntries(await request.formData());
+    const id = String(data.id ?? '');
+    if (!id) return fail(400, { error: 'Missing id' });
+
+    const parsed = addSchema.safeParse(data);
+    if (!parsed.success) return fail(400, { error: 'Invalid input' });
+
+    const email = parsed.data.email.toLowerCase().trim();
+
+    // Check if email changed and is now taken
+    const current = await db.query.attendees.findFirst({
+      where: eq(attendees.id, id)
+    });
+    if (!current) return fail(404, { error: 'Guest not found' });
+
+    if (email !== current.email) {
+      const existing = await db.query.attendees.findFirst({
+        where: and(eq(attendees.conferenceId, conf.id), eq(attendees.email, email))
+      });
+      if (existing) return fail(409, { error: 'Email already in use' });
+    }
+
+    await db
+      .update(attendees)
+      .set({
+        name: parsed.data.name,
+        email,
+        company: parsed.data.company || null,
+        role: parsed.data.role || null,
+        whatsapp: parsed.data.whatsapp || null
+      })
+      .where(and(eq(attendees.id, id), eq(attendees.conferenceId, conf.id)));
+
+    return { edited: true };
+  },
+
   import: async ({ request, locals, params }) => {
     const { conf } = await ctx(params as any, locals, 'admin');
     const fd = await request.formData();
