@@ -111,10 +111,10 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m6.75 12-3-3m0 0-3 3m3-3v6m-1.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/>
           </svg>
           <span class="text-sm font-medium text-slate-700">
-            {dragging ? 'Drop to import' : 'Drop contacts CSV here'}
+            {dragging ? 'Drop to import' : 'Drop CSV or vCard (.vcf) here'}
           </span>
           <span class="text-xs text-slate-500">
-            or click to browse &nbsp;·&nbsp; Required: <code class="rounded bg-slate-200 px-1">name</code> <code class="rounded bg-slate-200 px-1">email</code> &nbsp;·&nbsp; Optional: <code class="rounded bg-slate-200 px-1">whatsapp</code> <code class="rounded bg-slate-200 px-1">company</code> <code class="rounded bg-slate-200 px-1">role</code>
+            or click to browse &nbsp;·&nbsp; CSV columns: <code class="rounded bg-slate-200 px-1">name</code> <code class="rounded bg-slate-200 px-1">email</code> <code class="rounded bg-slate-200 px-1">whatsapp</code> <code class="rounded bg-slate-200 px-1">company</code> <code class="rounded bg-slate-200 px-1">role</code> &nbsp;·&nbsp; vCard from macOS Contacts works too
           </span>
         </button>
       {:else}
@@ -138,7 +138,7 @@
     <input
       type="file"
       name="file"
-      accept=".csv,text/csv"
+      accept=".csv,text/csv,.vcf,text/vcard,text/x-vcard"
       class="hidden"
       bind:this={fileInput}
       onchange={onFileChange}
@@ -211,7 +211,7 @@
       {#each data.guests as g}
         <tr class="border-t border-slate-100">
           <td class="px-4 py-2 font-medium">{g.name}</td>
-          <td class="px-4 py-2 text-slate-600">{g.email}</td>
+          <td class="px-4 py-2 text-slate-600">{g.email ?? '—'}</td>
           <td class="px-4 py-2 text-slate-500">{g.company ?? '—'}</td>
           <td class="px-4 py-2">
             <span class="rounded bg-slate-100 px-2 py-0.5 text-xs">{g.status}</span>

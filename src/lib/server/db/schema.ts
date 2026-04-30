@@ -7,6 +7,7 @@ export const users = sqliteTable('users', {
   id: text('id').primaryKey(),
   email: text('email').notNull().unique(),
   name: text('name'),
+  isAdmin: integer('is_admin', { mode: 'boolean' }).notNull().default(false),
   createdAt: integer('created_at', { mode: 'timestamp' })
     .notNull()
     .default(sql`(unixepoch())`)
@@ -133,7 +134,7 @@ export const attendees = sqliteTable(
     conferenceId: text('conference_id')
       .notNull()
       .references(() => conferences.id, { onDelete: 'cascade' }),
-    email: text('email').notNull(),
+    email: text('email'),
     name: text('name').notNull(),
     company: text('company'),
     role: text('role'),

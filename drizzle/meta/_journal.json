@@ -15,6 +15,20 @@
       "when": 1777518442837,
       "tag": "0001_tidy_mantis",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1777524549591,
+      "tag": "0002_bored_bastion",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1777528538103,
+      "tag": "0003_furry_anthem",
+      "breakpoints": true
     }
   ]
 }

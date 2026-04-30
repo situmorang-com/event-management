@@ -7,6 +7,7 @@ import { attendees, conferences, emailJobs } from '$lib/server/db/schema';
 import { newId, newTicketCode } from '$lib/utils/ids';
 import { sendTicketConfirmation } from '$lib/server/email';
 import { parseCSV } from '$lib/utils/csv';
+import { parseVCard } from '$lib/utils/vcard';
 import { getTeamBySlug, requireTeamRole, requireUser } from '$lib/server/permissions';
 import { error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
@@ -139,13 +140,22 @@ export const actions: Actions = {
     if (file.size > 2 * 1024 * 1024) return fail(400, { importError: 'File too large (max 2 MB)' });
 
     const text = await file.text();
-    const rows = parseCSV(text);
-    if (rows.length === 0) return fail(400, { importError: 'No rows found. Check that your file has a header row.' });
+    const isVCard = /BEGIN:VCARD/i.test(text.slice(0, 200)) || /\.vcf$/i.test(file.name);
+    const rows = isVCard ? parseVCard(text) : parseCSV(text);
+    if (rows.length === 0) {
+      return fail(400, {
+        importError: isVCard
+          ? 'No contacts found in vCard file.'
+          : 'No rows found. Check that your file has a header row.'
+      });
+    }
 
-    // Require at least name + email columns
-    const sample = rows[0];
-    if (!('name' in sample) || !('email' in sample)) {
-      return fail(400, { importError: 'CSV must have "name" and "email" columns. Other supported columns: whatsapp, company, role.' });
+    if (!isVCard) {
+      // Require at least name + email columns for CSV
+      const sample = rows[0];
+      if (!('name' in sample) || !('email' in sample)) {
+        return fail(400, { importError: 'CSV must have "name" and "email" columns. Other supported columns: whatsapp, company, role.' });
+      }
     }
 
     let imported = 0;
@@ -153,17 +163,23 @@ export const actions: Actions = {
     const errors: string[] = [];
 
     for (const row of rows) {
-      const email = (row['email'] ?? '').toLowerCase().trim();
+      const email = (row['email'] ?? '').toLowerCase().trim() || null;
+      const whatsapp = (row['whatsapp'] ?? '').trim() || null;
       const name = (row['name'] ?? '').trim();
-      if (!email || !name) { skipped++; continue; }
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        errors.push(`Invalid email: ${email}`);
+
+      if (!name) { errors.push(`Skipped row — no name`); skipped++; continue; }
+      if (!email && !whatsapp) { errors.push(`Skipped "${name}" — no email or phone`); skipped++; continue; }
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errors.push(`Skipped "${name}" — invalid email: ${email}`);
         skipped++;
         continue;
       }
 
+      // Deduplicate: by email if present, else by whatsapp
       const existing = await db.query.attendees.findFirst({
-        where: and(eq(attendees.conferenceId, conf.id), eq(attendees.email, email))
+        where: email
+          ? and(eq(attendees.conferenceId, conf.id), eq(attendees.email, email))
+          : and(eq(attendees.conferenceId, conf.id), eq(attendees.whatsapp, whatsapp!))
       });
       if (existing) { skipped++; continue; }
 
@@ -174,7 +190,7 @@ export const actions: Actions = {
         name,
         company: row['company'] || null,
         role: row['role'] || null,
-        whatsapp: row['whatsapp'] || null,
+        whatsapp,
         ticketCode: newTicketCode(),
         status: 'registered'
       });

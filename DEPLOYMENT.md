@@ -45,6 +45,21 @@ NODE_ENV=production
 DATABASE_URL=file:./data/app.db
 ```
 
+**Google OAuth:**
+Set up Google OAuth 2.0 credentials in [Google Cloud Console](https://console.cloud.google.com/):
+1. Create a new project or use existing one
+2. Enable Google Identity API
+3. Create OAuth 2.0 credentials (Web application)
+4. Add authorized redirect URI: `https://event.transmetatek.com/auth/oauth/google/callback`
+5. Copy Client ID and Client Secret and set:
+```
+GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your-client-secret
+GOOGLE_REDIRECT_URI=https://event.transmetatek.com/auth/oauth/google/callback
+```
+
+> **Note:** The default admin account is `edmundsitumorang@gmail.com` — the first user with this email to sign in will automatically be promoted to admin.
+
 **Email (SMTP):**
 Using Hostinger for transmetatek.com:
 ```

@@ -2,6 +2,7 @@ import { sha256 } from '@oslojs/crypto/sha2';
 import { encodeHexLowerCase } from '@oslojs/encoding';
 import { eq, and, isNull, gt } from 'drizzle-orm';
 import type { Cookies } from '@sveltejs/kit';
+import { OAuth2Client } from 'google-auth-library';
 import { db } from './db';
 import { users, sessions, authTokens } from './db/schema';
 import { newId, newToken } from '$lib/utils/ids';
@@ -100,7 +101,37 @@ export async function consumeMagicLink(
   if (!user) {
     const id = newId('usr');
     await db.insert(users).values({ id, email: row.email });
-    user = { id, email: row.email, name: null, createdAt: new Date() };
+    user = { id, email: row.email, name: null, isAdmin: false, createdAt: new Date() };
   }
   return { userId: user.id, email: user.email };
+}
+
+// ───────────────────────────── Google OAuth ─────────────────────────────
+
+export async function validateGoogleIdToken(
+  token: string
+): Promise<{ email: string; name: string | null } | null> {
+  const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID
+    });
+    const payload = ticket.getPayload();
+    if (!payload?.email) return null;
+    return {
+      email: payload.email.toLowerCase().trim(),
+      name: payload.name || null
+    };
+  } catch {
+    return null;
+  }
+}
+
+export async function getGoogleOAuthClient() {
+  return new OAuth2Client(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    process.env.GOOGLE_REDIRECT_URI
+  );
 }
