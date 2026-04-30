@@ -200,8 +200,8 @@
     <thead class="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
       <tr>
         <th class="px-4 py-2">Name</th>
-        <th class="px-4 py-2">Email</th>
         <th class="px-4 py-2">Company</th>
+        <th class="px-4 py-2">Role</th>
         <th class="px-4 py-2">Status</th>
         <th class="px-4 py-2">Registered</th>
         <th class="px-4 py-2">Actions</th>
@@ -211,8 +211,8 @@
       {#each data.guests as g}
         <tr class="border-t border-slate-100">
           <td class="px-4 py-2 font-medium">{g.name}</td>
-          <td class="px-4 py-2 text-slate-600">{g.email ?? '—'}</td>
           <td class="px-4 py-2 text-slate-500">{g.company ?? '—'}</td>
+          <td class="px-4 py-2 text-slate-500">{g.role ?? '—'}</td>
           <td class="px-4 py-2">
             <span class="rounded bg-slate-100 px-2 py-0.5 text-xs">{g.status}</span>
           </td>
@@ -221,6 +221,7 @@
           </td>
           <td class="px-4 py-2">
             <div class="flex items-center gap-2">
+              <a class="text-xs underline" href={`mailto:${g.email}`} title={g.email}>email</a>
               <a class="text-xs underline" href={`/ticket/${g.ticketCode}`} target="_blank">ticket</a>
               {#if g.whatsapp}
                 {@const link = waLink(g.whatsapp, g.name, g.ticketCode)}
