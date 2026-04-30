@@ -202,8 +202,8 @@
               {(a.company ?? a.role ?? '?')[0].toUpperCase()}
             </div>
             <div class="min-w-0">
-              <p class="truncate font-medium text-slate-900">{a.role ?? 'Executive'}</p>
-              <p class="truncate text-sm text-slate-500">{a.company ?? ''}</p>
+              <p class="truncate font-semibold text-slate-900">{a.company ?? ''}</p>
+              <p class="truncate text-sm text-slate-500">{a.role ?? 'Executive'}</p>
               {#if a.companySize}
                 <span class="mt-1 inline-block rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-500">{a.companySize} employees</span>
               {/if}
