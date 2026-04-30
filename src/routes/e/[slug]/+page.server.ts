@@ -103,7 +103,7 @@ const regSchema = z.object({
   companySize: z.string().trim().max(60).optional().or(z.literal('')),
   industry: z.string().trim().max(120).optional().or(z.literal('')),
   role: z.string().trim().max(120).optional().or(z.literal('')),
-  whatsapp: z.string().trim().max(30).optional().or(z.literal(''))
+  whatsapp: z.string().trim().min(1, 'WhatsApp number is required').max(30)
 });
 
 export const actions: Actions = {

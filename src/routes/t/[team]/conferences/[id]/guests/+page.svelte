@@ -12,6 +12,13 @@
 
   const csvHref = `/t/${data.team.slug}/conferences/${data.conference.id}/guests/export.csv`;
 
+  const INDUSTRIES = [
+    'Banking & Finance', 'Insurance', 'Capital Markets', 'Asset Management', 'Fintech',
+    'Technology', 'Consulting', 'Healthcare', 'Energy', 'Manufacturing',
+    'Retail & Consumer', 'Real Estate', 'Telecommunications', 'Government & Public Sector',
+    'Media & Entertainment', 'Education', 'Other'
+  ];
+
   function waLink(number: string | null, name: string, ticketCode: string) {
     if (!number) return null;
     const normalized = number.replace(/[^\d]/g, '');
@@ -164,7 +171,10 @@
     </label>
     <label class="block">
       <span class="text-sm font-medium">Industry</span>
-      <input name="industry" class="input mt-1" />
+      <select name="industry" class="input mt-1">
+        <option value="">Select industry</option>
+        {#each INDUSTRIES as i}<option value={i}>{i}</option>{/each}
+      </select>
     </label>
     <label class="block">
       <span class="text-sm font-medium">Company size</span>
@@ -312,7 +322,7 @@
           </label>
           <label class="block">
             <span class="text-sm font-medium">Email</span>
-            <input type="email" name="email" required class="input mt-1" value={guest.email ?? ''} />
+            <input type="email" name="email" class="input mt-1" value={guest.email ?? ''} />
           </label>
           <label class="block">
             <span class="text-sm font-medium">Company</span>
@@ -320,7 +330,12 @@
           </label>
           <label class="block">
             <span class="text-sm font-medium">Industry</span>
-            <input name="industry" class="input mt-1" value={guest.industry ?? ''} />
+            <select name="industry" class="input mt-1">
+              <option value="">Select industry</option>
+              {#each INDUSTRIES as i}
+                <option value={i} selected={guest.industry === i}>{i}</option>
+              {/each}
+            </select>
           </label>
           <label class="block">
             <span class="text-sm font-medium">Company size</span>

@@ -45,6 +45,16 @@ export const load: PageServerLoad = async ({ url, parent }) => {
   return { guests: list, q, status };
 };
 
+const editSchema = z.object({
+  name: z.string().trim().min(1).max(120),
+  email: z.string().email().max(254).optional().or(z.literal('')),
+  company: z.string().trim().max(120).optional().or(z.literal('')),
+  companySize: z.string().trim().max(60).optional().or(z.literal('')),
+  industry: z.string().trim().max(120).optional().or(z.literal('')),
+  role: z.string().trim().max(120).optional().or(z.literal('')),
+  whatsapp: z.string().trim().max(30).optional().or(z.literal(''))
+});
+
 const addSchema = z.object({
   name: z.string().trim().min(1).max(120),
   email: z.string().email().max(254),
@@ -142,18 +152,15 @@ export const actions: Actions = {
     const id = String(data.id ?? '');
     if (!id) return fail(400, { error: 'Missing id' });
 
-    const parsed = addSchema.safeParse(data);
+    const parsed = editSchema.safeParse(data);
     if (!parsed.success) return fail(400, { error: 'Invalid input' });
 
-    const email = parsed.data.email.toLowerCase().trim();
+    const email = parsed.data.email ? parsed.data.email.toLowerCase().trim() : null;
 
-    // Check if email changed and is now taken
-    const current = await db.query.attendees.findFirst({
-      where: eq(attendees.id, id)
-    });
+    const current = await db.query.attendees.findFirst({ where: eq(attendees.id, id) });
     if (!current) return fail(404, { error: 'Guest not found' });
 
-    if (email !== current.email) {
+    if (email && email !== current.email) {
       const existing = await db.query.attendees.findFirst({
         where: and(eq(attendees.conferenceId, conf.id), eq(attendees.email, email))
       });
@@ -164,7 +171,7 @@ export const actions: Actions = {
       .update(attendees)
       .set({
         name: parsed.data.name,
-        email,
+        email: email || current.email,
         company: parsed.data.company || null,
         companySize: parsed.data.companySize || null,
         industry: parsed.data.industry || null,
