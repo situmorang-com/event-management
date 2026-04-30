@@ -137,6 +137,8 @@ export const attendees = sqliteTable(
     email: text('email'),
     name: text('name').notNull(),
     company: text('company'),
+    companySize: text('company_size'),
+    industry: text('industry'),
     role: text('role'),
     whatsapp: text('whatsapp'),
     status: text('status').notNull().default('registered'), // registered | confirmed | checked_in | cancelled

@@ -150,6 +150,22 @@
                 <span class="text-sm font-medium text-slate-700">Role / Title</span>
                 <input name="role" class="input mt-1" placeholder="e.g. CIO" value={form?.values?.role ?? ''} />
               </label>
+              <label class="block">
+                <span class="text-sm font-medium text-slate-700">Industry</span>
+                <input name="industry" class="input mt-1" placeholder="e.g. Financial Services" value={form?.values?.industry ?? ''} />
+              </label>
+              <label class="block">
+                <span class="text-sm font-medium text-slate-700">Company size</span>
+                <select name="companySize" class="input mt-1">
+                  <option value="">Select size</option>
+                  <option value="1-10" selected={form?.values?.companySize === '1-10'}>1–10</option>
+                  <option value="11-50" selected={form?.values?.companySize === '11-50'}>11–50</option>
+                  <option value="51-200" selected={form?.values?.companySize === '51-200'}>51–200</option>
+                  <option value="201-1000" selected={form?.values?.companySize === '201-1000'}>201–1,000</option>
+                  <option value="1001-5000" selected={form?.values?.companySize === '1001-5000'}>1,001–5,000</option>
+                  <option value="5000+" selected={form?.values?.companySize === '5000+'}>5,000+</option>
+                </select>
+              </label>
               <label class="block sm:col-span-2">
                 <span class="text-sm font-medium text-slate-700">WhatsApp number</span>
                 <div class="relative mt-1">

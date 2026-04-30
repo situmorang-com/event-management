@@ -29,6 +29,13 @@
       "when": 1777528538103,
       "tag": "0003_furry_anthem",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1777535020996,
+      "tag": "0004_exotic_ink",
+      "breakpoints": true
     }
   ]
 }

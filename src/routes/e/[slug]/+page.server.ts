@@ -82,6 +82,8 @@ const regSchema = z.object({
   name: z.string().trim().min(1).max(120),
   email: z.string().email().max(254),
   company: z.string().trim().max(120).optional().or(z.literal('')),
+  companySize: z.string().trim().max(60).optional().or(z.literal('')),
+  industry: z.string().trim().max(120).optional().or(z.literal('')),
   role: z.string().trim().max(120).optional().or(z.literal('')),
   whatsapp: z.string().trim().max(30).optional().or(z.literal(''))
 });
@@ -139,6 +141,8 @@ export const actions: Actions = {
             email,
             name: parsed.data.name,
             company: parsed.data.company || null,
+            companySize: parsed.data.companySize || null,
+            industry: parsed.data.industry || null,
             role: parsed.data.role || null,
             whatsapp: parsed.data.whatsapp || null,
             ticketCode: code,

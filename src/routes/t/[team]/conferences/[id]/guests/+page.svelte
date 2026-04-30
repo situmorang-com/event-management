@@ -163,6 +163,19 @@
       <input name="company" class="input mt-1" />
     </label>
     <label class="block">
+      <span class="text-sm font-medium">Industry</span>
+      <input name="industry" class="input mt-1" />
+    </label>
+    <label class="block">
+      <span class="text-sm font-medium">Company size</span>
+      <select name="companySize" class="input mt-1">
+        <option value="">Select size</option>
+        {#each ['1-10','11-50','51-200','201-1000','1001-5000','5000+'] as s}
+          <option value={s}>{s.replace('-','–')}</option>
+        {/each}
+      </select>
+    </label>
+    <label class="block">
       <span class="text-sm font-medium">Role</span>
       <input name="role" class="input mt-1" />
     </label>
@@ -202,6 +215,8 @@
       <tr>
         <th class="px-4 py-2">Name</th>
         <th class="px-4 py-2">Company</th>
+        <th class="px-4 py-2">Industry</th>
+        <th class="px-4 py-2">Size</th>
         <th class="px-4 py-2">Role</th>
         <th class="px-4 py-2">Status</th>
         <th class="px-4 py-2">Registered</th>
@@ -213,6 +228,8 @@
         <tr class="border-t border-slate-100">
           <td class="px-4 py-2 font-medium">{g.name}</td>
           <td class="px-4 py-2 text-slate-500">{g.company ?? '—'}</td>
+          <td class="px-4 py-2 text-slate-500">{g.industry ?? '—'}</td>
+          <td class="px-4 py-2 text-slate-500">{g.companySize ?? '—'}</td>
           <td class="px-4 py-2 text-slate-500">{g.role ?? '—'}</td>
           <td class="px-4 py-2">
             <span class="rounded bg-slate-100 px-2 py-0.5 text-xs">{g.status}</span>
@@ -255,7 +272,7 @@
         </tr>
       {:else}
         <tr>
-          <td colspan="6" class="px-4 py-8 text-center text-slate-500">No guests yet.</td>
+          <td colspan="8" class="px-4 py-8 text-center text-slate-500">No guests yet.</td>
         </tr>
       {/each}
     </tbody>
@@ -294,6 +311,19 @@
           <label class="block">
             <span class="text-sm font-medium">Company</span>
             <input name="company" class="input mt-1" value={guest.company ?? ''} />
+          </label>
+          <label class="block">
+            <span class="text-sm font-medium">Industry</span>
+            <input name="industry" class="input mt-1" value={guest.industry ?? ''} />
+          </label>
+          <label class="block">
+            <span class="text-sm font-medium">Company size</span>
+            <select name="companySize" class="input mt-1">
+              <option value="">Select size</option>
+              {#each ['1-10','11-50','51-200','201-1000','1001-5000','5000+'] as s}
+                <option value={s} selected={guest.companySize === s}>{s.replace('-','–')}</option>
+              {/each}
+            </select>
           </label>
           <label class="block">
             <span class="text-sm font-medium">Role</span>
