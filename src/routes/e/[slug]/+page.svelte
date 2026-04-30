@@ -19,8 +19,16 @@
     'Media & Entertainment', 'Education', 'Other'
   ];
 
-  const ogImage = `${page.url.origin}/e/${c.slug}/og.png`;
   const canonicalUrl = `${page.url.origin}/e/${c.slug}`;
+  const toAbsoluteUrl = (url: string) =>
+    /^https?:\/\//i.test(url) ? url : new URL(url, page.url.origin).toString();
+  const sponsorLogoAssetId = data.sponsors.find((s) => s.logoAssetId)?.logoAssetId;
+  const sponsorOgImage = sponsorLogoAssetId
+    ? `${page.url.origin}/files/${sponsorLogoAssetId}`
+    : null;
+  const ogImage = c.bannerUrl
+    ? toAbsoluteUrl(c.bannerUrl)
+    : sponsorOgImage ?? `${page.url.origin}/e/${c.slug}/og.png`;
 
   const fmtDate = (d: Date) => new Date(d).toLocaleDateString('en-US', {
     timeZone: tz, weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
@@ -201,7 +209,7 @@
     <section class="mt-16 animate-fade-up" style="animation-delay:0.2s">
       <div class="mb-6 flex items-center gap-3">
         <div class="h-px flex-1 bg-slate-200"></div>
-        <h2 class="text-xs font-semibold uppercase tracking-widest text-slate-400">Who's attending</h2>
+        <h2 class="text-xs font-semibold uppercase tracking-widest text-slate-400">Guest List</h2>
         <div class="h-px flex-1 bg-slate-200"></div>
       </div>
       <div class="grid gap-3 sm:grid-cols-2">

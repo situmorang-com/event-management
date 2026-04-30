@@ -81,6 +81,7 @@ export const load: PageServerLoad = async ({ params }) => {
       slug: conf.slug,
       name: conf.name,
       description: conf.description,
+      bannerUrl: conf.bannerUrl,
       venue: conf.venue,
       timezone: conf.timezone,
       startsAt: conf.startsAt,
