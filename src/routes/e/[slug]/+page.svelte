@@ -187,6 +187,33 @@
     </div>
   </div>
 
+  <!-- Who's attending -->
+  {#if data.attendees.length > 0}
+    <section class="mt-16 animate-fade-up" style="animation-delay:0.2s">
+      <div class="mb-6 flex items-center gap-3">
+        <div class="h-px flex-1 bg-slate-200"></div>
+        <h2 class="text-xs font-semibold uppercase tracking-widest text-slate-400">Who's attending</h2>
+        <div class="h-px flex-1 bg-slate-200"></div>
+      </div>
+      <div class="grid gap-3 sm:grid-cols-2">
+        {#each data.attendees as a}
+          <div class="flex items-start gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-soft">
+            <div class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-sm font-semibold text-slate-600">
+              {(a.company ?? a.role ?? '?')[0].toUpperCase()}
+            </div>
+            <div class="min-w-0">
+              <p class="truncate font-medium text-slate-900">{a.role ?? 'Executive'}</p>
+              <p class="truncate text-sm text-slate-500">{a.company ?? ''}</p>
+              {#if a.companySize}
+                <span class="mt-1 inline-block rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-500">{a.companySize} employees</span>
+              {/if}
+            </div>
+          </div>
+        {/each}
+      </div>
+    </section>
+  {/if}
+
   <!-- Sponsors -->
   {#if data.sponsors.length > 0}
     <section class="mt-16 animate-fade-up" style="animation-delay:0.2s">

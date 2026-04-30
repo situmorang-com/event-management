@@ -10,6 +10,7 @@ import {
   attendees,
   emailJobs
 } from '$lib/server/db/schema';
+import { asc } from 'drizzle-orm';
 import { newId, newTicketCode } from '$lib/utils/ids';
 import { sendTicketConfirmation } from '$lib/server/email';
 import type { Actions, PageServerLoad } from './$types';
@@ -59,6 +60,22 @@ export const load: PageServerLoad = async ({ params }) => {
       )
     );
 
+  const publicAttendees = await db
+    .select({
+      company: attendees.company,
+      role: attendees.role,
+      companySize: attendees.companySize,
+      industry: attendees.industry
+    })
+    .from(attendees)
+    .where(
+      and(
+        eq(attendees.conferenceId, conf.id),
+        sql`${attendees.status} != 'cancelled'`
+      )
+    )
+    .orderBy(asc(attendees.registeredAt));
+
   return {
     conference: {
       slug: conf.slug,
@@ -74,7 +91,8 @@ export const load: PageServerLoad = async ({ params }) => {
     isFull,
     isClosed,
     tiers,
-    sponsors: publicSponsors
+    sponsors: publicSponsors,
+    attendees: publicAttendees.filter(a => a.company || a.role)
   };
 };
 
